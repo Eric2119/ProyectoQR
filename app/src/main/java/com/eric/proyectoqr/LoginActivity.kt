@@ -37,22 +37,31 @@ class LoginActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    // Construir la petición con email, contraseña y el nombre del dispositivo
+                    // Petición de login
                     val request = LoginRequest(email, password, "android")
-                    val response = RetrofitClient.apiService.login(request)
+                    val api = RetrofitClient.getInstance(this@LoginActivity)
+                    val response = api.login(request)
 
                     if (response.isSuccessful) {
                         val body = response.body()
                         if (body != null && !body.token.isNullOrEmpty()) {
-                            // Aquí podrías guardar body.token para futuras llamadas
+
+                            // ✅ Guardar token completo (con Bearer)
+                            val sharedPref = getSharedPreferences("app_prefs", MODE_PRIVATE)
+                            sharedPref.edit().apply {
+                                putString("auth_token", "${body.tokenType} ${body.token}")
+                                apply()
+                            }
+
+                            // Ir al MainActivity
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                             finish()
+
                         } else {
                             binding.errorTextView.text = getString(R.string.error_login_failed)
                             binding.errorTextView.isVisible = true
                         }
                     } else {
-                        // Intentamos leer el mensaje de error del servidor
                         val errorMsg = try {
                             response.errorBody()?.string() ?: getString(R.string.error_login_failed)
                         } catch (_: Exception) {
@@ -70,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // Listeners para los enlaces (p. ej. recuperación de contraseña)
+        // Enlaces (sin implementar aún)
         binding.forgotPasswordText.setOnClickListener {
             Toast.makeText(this, "Funcionalidad no implementada todavía", Toast.LENGTH_SHORT).show()
         }
