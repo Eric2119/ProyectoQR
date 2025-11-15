@@ -7,4 +7,22 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    <color name="loginGradientStart">#050816</color>
+    <color name="loginGradientCenter">#111827</color>
+    <color name="loginGradientEnd">#1E1B4B</color>
+
+    <color name="loginPrimary">#7C3AED</color>
+    <color name="loginPrimaryVariant">#A855F7</color>
+
+    <color name="loginCardBackground">#111827</color>
+    <color name="loginInputBackground">#111827</color>
+    <color name="loginInputStroke">#7C3AED</color>
+
+    <color name="loginTextOnPrimary">#FFFFFF</color>
+    <color name="loginLabel">#FFFFFF</color>
+    <color name="loginHint">#F9FAFB</color>
+    <color name="loginError">#F97373</color>
+
 </resources>

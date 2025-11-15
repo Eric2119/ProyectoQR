@@ -19,9 +19,11 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Ocultar elementos al inicio
         binding.progressBar.isVisible = false
         binding.errorTextView.isVisible = false
 
+        // Botón de iniciar sesión
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text?.toString()?.trim().orEmpty()
             val password = binding.passwordEditText.text?.toString()?.trim().orEmpty()
@@ -79,12 +81,21 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // Enlaces (sin implementar aún)
-        binding.forgotPasswordText.setOnClickListener {
-            Toast.makeText(this, "Funcionalidad no implementada todavía", Toast.LENGTH_SHORT).show()
+        // Enlaces (sin implementar aún, solo muestran un Toast)
+        binding.forgotPasswordTextView.setOnClickListener {
+            Toast.makeText(
+                this,
+                "Funcionalidad no implementada todavía",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-        binding.createAccountText.setOnClickListener {
-            Toast.makeText(this, "Funcionalidad no implementada todavía", Toast.LENGTH_SHORT).show()
+
+        binding.createAccountTextView.setOnClickListener {
+            Toast.makeText(
+                this,
+                "Funcionalidad no implementada todavía",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }

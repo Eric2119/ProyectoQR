@@ -1,18 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:background="@drawable/login_background">
 
-    <Button
-        android:id="@+id/scanButton"
+    <!-- Barra superior con logo -->
+    <ImageView
+        android:id="@+id/toolbarLogo"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/logo_empresa"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/toolbarTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Escanear boleto"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        android:text="Salón de eventos El Polvorín"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/toolbarLogo"
+        app:layout_constraintTop_toTopOf="@id/toolbarLogo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <!-- Chip modo validador -->
+    <TextView
+        android:id="@+id/modeChip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp"
+        android:text="Modo validador"
+        android:textColor="@color/loginTextOnPrimary"
+        android:textSize="12sp"
+        android:background="@drawable/small_chip_bg"
+        app:layout_constraintTop_toBottomOf="@id/toolbarLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Título / subtítulo -->
+    <TextView
+        android:id="@+id/mainTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Escanear boletos QR"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/modeChip"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/mainSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Valida el acceso de tus invitados en segundos"
+        android:textColor="@color/loginHint"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/mainTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- CARD PRINCIPAL (icono + botón grande) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/heroCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="10dp"
+        app:cardBackgroundColor="@color/loginCardBackground"
+        app:layout_constraintTop_toBottomOf="@id/mainSubtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Icono dentro de círculo -->
+            <FrameLayout
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/scan_circle_background">
+
+                <ImageView
+                    android:id="@+id/qrIllustration"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/ic_menu_camera"
+                    android:tint="@color/loginTextOnPrimary" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/infoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"
+                android:text="Escanea. Valida. Deja pasar."
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/infoDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Apunta la cámara al código QR del boleto y valida el acceso de tus invitados de forma rápida y segura."
+                android:textColor="@color/loginHint"
+                android:textSize="14sp" />
+
+            <!-- BOTÓN PRINCIPAL, BIEN VISIBLE -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/scanButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Escanear boleto"
+                android:textAllCaps="false"
+                android:textColor="@color/loginTextOnPrimary"
+                android:textStyle="bold"
+                android:insetTop="14dp"
+                android:insetBottom="14dp"
+                app:cornerRadius="999dp"
+                app:backgroundTint="@color/loginPrimary"
+                app:icon="@android:drawable/ic_menu_camera"
+                app:iconTint="@color/loginTextOnPrimary"
+                app:iconPadding="8dp" />
+
+            <TextView
+                android:id="@+id/scanHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Toca el botón para abrir la cámara y leer el código QR."
+                android:textColor="@color/loginHint"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- CARD DE TIPS DESPLEGABLES -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/tipsCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="@color/loginInputBackground"
+        app:layout_constraintTop_toBottomOf="@id/heroCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Header cliqueable -->
+            <LinearLayout
+                android:id="@+id/tipsHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingVertical="4dp">
+
+                <TextView
+                    android:id="@+id/tipsTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tips para escanear mejor"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/tipsArrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@android:drawable/arrow_down_float"
+                    android:tint="@color/loginHint" />
+            </LinearLayout>
+
+            <!-- Contenido desplegable -->
+            <LinearLayout
+                android:id="@+id/tipsContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="• Mantén el QR centrado en el encuadre de la cámara."
+                    android:textColor="@color/loginLabel"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="• Evita reflejos fuertes o pantalla muy brillante."
+                    android:textColor="@color/loginLabel"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="• Si no lee a la primera, acércate o aléjate un poco."
+                    android:textColor="@color/loginLabel"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="• Revisa que el boleto no esté muy dañado o doblado."
+                    android:textColor="@color/loginLabel"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

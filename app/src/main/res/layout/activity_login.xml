@@ -1,147 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
     android:background="@drawable/login_background">
 
-    <!-- ===== HEADER NUEVO: logos circulares + títulos ===== -->
-    <LinearLayout
-        android:id="@+id/headerBlock"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
+    <!-- Logo centrado -->
+    <ImageView
+        android:id="@+id/logoClienteImage"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="64dp"
+        android:src="@drawable/logo_cliente"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Fila de logos circulares -->
-        <LinearLayout
-            android:id="@+id/logoRow"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:gravity="center"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
+    <!-- Título -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Salón de eventos El Polvorín"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/logoClienteImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/companyLogo"
-                android:layout_width="84dp"
-                android:layout_height="84dp"
-                android:src="@drawable/logo_empresa"
-                android:scaleType="centerCrop"
-                android:contentDescription="@string/company_logo_desc"
-                app:shapeAppearanceOverlay="@style/CircleImage"
-                app:strokeColor="@color/purple_500"
-                app:strokeWidth="2dp"/>
+    <!-- Subtítulo -->
+    <TextView
+        android:id="@+id/subtitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Accede para validar boletos QR"
+        android:textColor="@color/loginHint"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/titleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-            <Space
-                android:layout_width="28dp"
-                android:layout_height="0dp" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/clientLogo"
-                android:layout_width="84dp"
-                android:layout_height="84dp"
-                android:src="@drawable/logo_cliente"
-                android:scaleType="centerCrop"
-                android:contentDescription="@string/client_logo_desc"
-                app:shapeAppearanceOverlay="@style/CircleImage"
-                app:strokeColor="@color/purple_500"
-                app:strokeWidth="2dp"/>
-        </LinearLayout>
-
-        <!-- Saludo principal -->
-        <TextView
-            android:id="@+id/loginTagline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@string/login_tagline"
-            android:textAppearance="?attr/textAppearanceHeadlineMedium"
-            android:textColor="@color/purple_700" />
-
-        <!-- Descripción breve -->
-        <TextView
-            android:id="@+id/loginDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/login_description"
-            android:textColor="@color/purple_700"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-    <!-- ===== CARD DEL FORMULARIO ===== -->
+    <!-- Card de login -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/loginCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/headerBlock"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/loginCardBackground"
+        app:layout_constraintTop_toBottomOf="@id/subtitleText"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.35">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="20dp">
 
-            <!-- Correo (icono en el EditText, con padding y separación) -->
+            <TextView
+                android:id="@+id/loginTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bienvenido"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/loginSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Ingresa tus credenciales para continuar"
+                android:textColor="@color/loginHint"
+                android:textSize="14sp" />
+
+            <!-- Correo -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email_hint"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                app:boxStrokeColor="@color/purple_500"
-                app:boxCornerRadiusTopStart="8dp"
-                app:boxCornerRadiusTopEnd="8dp"
-                app:boxCornerRadiusBottomStart="8dp"
-                app:boxCornerRadiusBottomEnd="8dp">
+                android:layout_marginTop="16dp"
+                android:hint="Correo electrónico"
+                android:textColorHint="@android:color/white"
+                app:boxBackgroundColor="@color/loginInputBackground"
+                app:boxStrokeColor="@color/loginInputStroke"
+                app:hintTextColor="@android:color/white"
+                app:startIconDrawable="@drawable/ic_mail_24"
+                app:startIconTint="@android:color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/emailEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:drawableStart="@drawable/ic_mail_24"
-                    android:drawablePadding="12dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"/>
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Contraseña (icono inicio como drawable + toggle al final) -->
+            <!-- Contraseña -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/passwordInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="@string/password_hint"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                app:boxStrokeColor="@color/purple_500"
-                app:boxCornerRadiusTopStart="8dp"
-                app:boxCornerRadiusTopEnd="8dp"
-                app:boxCornerRadiusBottomStart="8dp"
-                app:boxCornerRadiusBottomEnd="8dp"
-                app:endIconMode="password_toggle"
-                app:endIconTint="@color/purple_500">
+                android:layout_marginTop="12dp"
+                android:hint="Contraseña"
+                android:textColorHint="@android:color/white"
+                app:boxBackgroundColor="@color/loginInputBackground"
+                app:boxStrokeColor="@color/loginInputStroke"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@android:color/white"
+                app:hintTextColor="@android:color/white"
+                app:startIconDrawable="@drawable/ic_lock_24"
+                app:startIconTint="@android:color/white">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/passwordEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:drawableStart="@drawable/ic_lock_24"
-                    android:drawablePadding="12dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"/>
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@android:color/white" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Botón -->
@@ -149,60 +140,54 @@
                 android:id="@+id/loginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/login_button"
-                style="@style/Widget.Material3.Button"
-                app:cornerRadius="12dp"/>
+                android:layout_marginTop="20dp"
+                android:text="Iniciar sesión"
+                android:textAllCaps="false"
+                android:textColor="@color/loginTextOnPrimary"
+                android:textStyle="bold"
+                android:insetTop="12dp"
+                android:insetBottom="12dp"
+                app:cornerRadius="20dp"
+                app:backgroundTint="@color/loginPrimary" />
 
-            <!-- Enlaces -->
-            <TextView
-                android:id="@+id/forgotPasswordText"
+            <!-- Progress + error -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="@string/forgot_password"
-                android:textColor="@color/purple_500"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"/>
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone" />
 
             <TextView
-                android:id="@+id/createAccountText"
+                android:id="@+id/errorTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/loginError"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+            <!-- Links -->
+            <TextView
+                android:id="@+id/forgotPasswordTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="¿Olvidaste tu contraseña?"
+                android:textColor="@color/loginPrimaryVariant"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/createAccountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@string/create_account"
-                android:textColor="@color/purple_500"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:clickable="true"
-                android:foreground="?attr/selectableItemBackground"/>
+                android:text="Crear cuenta nueva"
+                android:textColor="@color/loginPrimaryVariant"
+                android:textSize="14sp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Progreso -->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:indeterminateTint="@color/purple_500"
-        app:layout_constraintTop_toBottomOf="@id/loginCard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- Error -->
-    <TextView
-        android:id="@+id/errorTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="14sp"
-        android:textAlignment="center"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/progressBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
