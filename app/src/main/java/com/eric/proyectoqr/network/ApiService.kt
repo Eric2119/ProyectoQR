@@ -5,13 +5,14 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface ApiService {
-    /**
-     * Solicita la autenticación. El backend espera un JSON con email, password y device.
-     */
+
+    // Login que ya tienes
     @POST("auth/login")
-    suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
+    suspend fun login(@Body body: LoginRequest): Response<LoginResponse>
 
+    // ✅ Validador de boletos
     @POST("validator/tickets/scan")
-    suspend fun scanTicket(@Body body: ScanTicketRequest): retrofit2.Response<ScanTicketResponse>
-
+    suspend fun validateTicket(
+        @Body body: ScanTicketRequest
+    ): Response<ScanTicketResponse>
 }

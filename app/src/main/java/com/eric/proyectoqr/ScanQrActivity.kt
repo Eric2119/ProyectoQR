@@ -3,6 +3,7 @@ package com.eric.proyectoqr
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,25 +15,21 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.eric.proyectoqr.databinding.ActivityScanQrBinding
-import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import org.json.JSONObject
 import java.util.concurrent.Executors
 
 class ScanQrActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityScanQrBinding
     private val cameraExecutor = Executors.newSingleThreadExecutor()
-
-    // Evita abrir la pantalla dos veces
     @Volatile private var handled = false
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        if (granted) startCamera() else finish()
-    }
+    ) { granted -> if (granted) startCamera() else finish() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +37,7 @@ class ScanQrActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-            == PackageManager.PERMISSION_GRANTED
-        ) {
+            == PackageManager.PERMISSION_GRANTED) {
             startCamera()
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
@@ -64,9 +60,9 @@ class ScanQrActivity : AppCompatActivity() {
 
             val analysis = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build().apply {
-                    setAnalyzer(cameraExecutor) { proxy -> analyzeFrame(scanner, proxy) }
-                }
+                .build()
+
+            analysis.setAnalyzer(cameraExecutor) { proxy -> analyzeFrame(scanner, proxy) }
 
             try {
                 provider.unbindAll()
@@ -92,40 +88,60 @@ class ScanQrActivity : AppCompatActivity() {
         scanner.process(image)
             .addOnSuccessListener { barcodes ->
                 if (handled) return@addOnSuccessListener
+                val raw = barcodes.firstOrNull()?.rawValue?.trim().orEmpty()
+                val token = extractToken(raw)
 
-                // Toma el primer valor no vacío (rawValue o displayValue)
-                val value = barcodes
-                    .firstOrNull { !it.rawValue.isNullOrBlank() || !it.displayValue.isNullOrBlank() }
-                    ?.rawValue ?: barcodes.firstOrNull()?.displayValue
-
-                if (!value.isNullOrBlank()) {
+                if (!raw.isNullOrEmpty() && token != null) {
                     handled = true
-                    Log.d("ScanQrActivity", "QR leído: $value")
+                    // Mandamos SOLO el token
+                    startActivity(
+                        Intent(this, TicketInfoActivity::class.java)
+                            .putExtra("token", token)
+                            .putExtra("qr_raw", raw)
 
-                    // Lanza TicketInfoActivity con la MISMA clave que ya usas: "qr_data"
-                    startActivity(Intent(this, TicketInfoActivity::class.java).apply {
-                        putExtra("qr_data", value)
+                    // opcional, por si lo quieres mostrar/debug
+                    )
+                    Log.d("ScanQrActivity", "QR raw = $raw, token = $token")
 
-                        // Estos extras quedarán en "-" hasta que integres la llamada a la API aquí
-                        putExtra("status", "-")
-                        putExtra("message", "-")
-                        putExtra("eventName", "-")
-                        putExtra("date", "-")
-                        putExtra("shift", "-")
-                        putExtra("mesa", "-")
-                        putExtra("ticketId", "-")
-                        putExtra("reservationId", "-")
-                        putExtra("usedAt", "-")
-                    })
                     finish()
                 }
             }
-            .addOnFailureListener { e ->
-                Log.e("ScanQrActivity", "Error analizando imagen", e)
-            }
-            .addOnCompleteListener {
-                imageProxy.close()
-            }
+            .addOnFailureListener { e -> Log.e("ScanQrActivity", "Error analizando imagen", e) }
+            .addOnCompleteListener { imageProxy.close() }
+    }
+
+    /**
+     * Extrae el token desde distintos formatos:
+     *  - {"t":"..."}  ó {"token":"..."}
+     *  - URL con ?t= o ?token=
+     *  - Valor plano (UUID/JWT/slug)
+     */
+    private fun extractToken(raw: String): String? {
+        if (raw.isBlank()) return null
+
+        // JSON del tipo {"t":"..."} o {"token":"..."}
+        if (raw.trim().startsWith("{") && raw.trim().endsWith("}")) {
+            runCatching {
+                val obj = JSONObject(raw)
+                return obj.optString("t")
+                    .ifEmpty { obj.optString("token") }
+                    .ifEmpty { null }
+            }.onFailure { /* ignore */ }
+        }
+
+        // URL con query param ?t= o ?token=
+        runCatching {
+            val uri = Uri.parse(raw)
+            val qp = uri.getQueryParameter("t")
+                ?: uri.getQueryParameter("token")
+            if (!qp.isNullOrBlank()) return qp
+        }
+
+        // Si ya es el token en crudo (UUID/slug largo)
+        val looksLikeToken = raw.matches(Regex("[A-Za-z0-9._\\-]{16,}"))
+        if (looksLikeToken) return raw
+
+        return null
     }
 
     override fun onDestroy() {

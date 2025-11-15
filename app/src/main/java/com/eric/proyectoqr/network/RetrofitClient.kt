@@ -8,27 +8,31 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-    // Usa tu subdominio actual del túnel (¡con /api/ y slash final!)
-    private const val BASE_URL =
-        "https://anywhere-brad-version-campus.trycloudflare.com/api/"
+
+    /**
+     * Emulador:    "http://10.0.2.2:8000/api/"
+     * Dispositivo: "http://IP_DE_TU_PC:8000/api/"
+     * Cloudflared: "https://<tu-subdominio>.trycloudflare.com/api/"
+     */
+    private const val BASE_URL = "https://hart-visited-intensity-spell.trycloudflare.com/api/"
 
     fun getInstance(context: Context): ApiService {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
-        val client = OkHttpClient.Builder()
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
-            .writeTimeout(20, TimeUnit.SECONDS)
-            .addInterceptor(AuthInterceptor(context)) // Bearer token si hay
+        // Si tu endpoint requiere Bearer, conserva tu AuthInterceptor
+        val http = OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(context)) // si no usas token, quita esta línea
             .addInterceptor(logging)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
             .build()
 
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(http)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
             .build()
 
         return retrofit.create(ApiService::class.java)
