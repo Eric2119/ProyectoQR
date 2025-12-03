@@ -14,7 +14,7 @@ object RetrofitClient {
      * Dispositivo: "http://IP_DE_TU_PC:8000/api/"
      * Cloudflared: "https://<tu-subdominio>.trycloudflare.com/api/"
      */
-    private const val BASE_URL = "https://level-combined-reggae-means.trycloudflare.com/api/"
+    private const val BASE_URL = "https://desired-students-expanding-writes.trycloudflare.com/api/"
 
     fun getInstance(context: Context): ApiService {
         val logging = HttpLoggingInterceptor().apply {

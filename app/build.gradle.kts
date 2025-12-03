@@ -63,8 +63,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    // Esto es para la animacion bellaka
-    implementation("com.airbnb.android:lottie:6.1.0")
-
 }

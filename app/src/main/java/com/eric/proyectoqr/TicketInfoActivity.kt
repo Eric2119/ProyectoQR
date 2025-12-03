@@ -13,9 +13,6 @@ import com.eric.proyectoqr.network.ScanTicketRequest
 import com.eric.proyectoqr.network.ScanTicketResponse
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.launch
-import android.view.View
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 
 class TicketInfoActivity : AppCompatActivity() {
 
@@ -43,8 +40,10 @@ class TicketInfoActivity : AppCompatActivity() {
         // Llamar a la API para validar el boleto
         lifecycleScope.launch {
             try {
+                // 1) Obtener la instancia de ApiService usando el contexto de la Activity
                 val api = RetrofitClient.getInstance(this@TicketInfoActivity)
 
+                // 2) Llamar al endpoint
                 val response = api.validateTicket(
                     ScanTicketRequest(token = token)
                 )
@@ -71,10 +70,10 @@ class TicketInfoActivity : AppCompatActivity() {
                     "Mensaje: error de red: ${e.localizedMessage ?: "desconocido"}"
             }
         }
+
     }
 
     private fun bindTicketInfo(qrRaw: String, data: ScanTicketResponse) {
-
         val status        = data.status ?: "-"
         val eventName     = data.eventName ?: "-"
         val date          = data.date ?: "-"
@@ -85,22 +84,25 @@ class TicketInfoActivity : AppCompatActivity() {
         val usedAt        = data.usedAt ?: "-"
         val message       = data.message ?: "-"
 
-        Log.d("STATUS_DEBUG", "Status recibido: $status") // 👈 Para ver qué llega EXACTO
-
+        // Texto base
         binding.qrDataTextView.text = "QR: $qrRaw"
         binding.statusChip.text = if (status.isBlank()) "-" else status.uppercase()
 
         binding.tvEventName.text = "Evento: $eventName"
+        binding.tvDate.text = "Fecha: $date"
         binding.tvShift.text = "Turno: $shift"
         binding.tvMesa.text = "Mesa: $mesa"
+        binding.tvTicketId.text = "Ticket ID: $ticketId"
+        binding.tvReservationId.text = "Reservación ID: $reservationId"
+        binding.tvUsedAt.text = "Usado en: $usedAt"
         binding.tvMessage.text = "Mensaje: $message"
 
-        // ✔️ LISTA DE ESTADOS VÁLIDOS (ya incluye USED)
-        val validStatuses = listOf("ok", "válido", "valido", "valid", "used")
+        // Colores del chip según status
+        val isOk = status.equals("ok", true) ||
+                status.equals("válido", true) ||
+                status.equals("valido", true) ||
+                status.equals("valid", true)
 
-        val isOk = validStatuses.any { it.equals(status, ignoreCase = true) }
-
-        // Cambiar color del chip
         val bgColorRes = if (isOk) R.color.teal_200 else android.R.color.holo_red_dark
         val textColor  = if (isOk) Color.BLACK else Color.WHITE
 
@@ -108,17 +110,5 @@ class TicketInfoActivity : AppCompatActivity() {
         val bgColor = ContextCompat.getColor(this, bgColorRes)
         chip.chipBackgroundColor = ColorStateList.valueOf(bgColor)
         chip.setTextColor(textColor)
-
-        // 🔥 ANIMACIÓN DE ÉXITO (solo si el boleto es válido) 🔥
-        if (isOk) {
-            binding.successAnim.visibility = View.VISIBLE
-            binding.successAnim.playAnimation()
-
-            binding.successAnim.addAnimatorListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    binding.successAnim.visibility = View.GONE
-                }
-            })
-        }
     }
 }
