@@ -1,9 +1,10 @@
-'<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@drawable/login_background"
+    android:padding="24dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,109 +14,137 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp">
+            android:layout_marginTop="32dp"
+            app:cardCornerRadius="26dp"
+            app:cardElevation="12dp"
+            app:cardBackgroundColor="@color/loginCardBackground">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="24dp">
 
-                <!-- Título -->
+                <!-- ICONO -->
+                <ImageView
+                    android:id="@+id/ticketIcon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/logo_cliente"
+                    android:scaleType="centerCrop" />
+
+                <!-- TÍTULO -->
                 <TextView
                     android:id="@+id/titleText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
                     android:text="Información del boleto"
-                    android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
-                <!-- Valor crudo del QR (opcional) -->
-                <TextView
-                    android:id="@+id/qrDataTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="QR: —"
-                    android:textAppearance="?attr/textAppearanceBodyMedium"
-                    android:visibility="gone" />
-
-
-                <!-- Estado -->
+                <!-- CHIVITO DE ESTADO -->
                 <com.google.android.material.chip.Chip
                     android:id="@+id/statusChip"
                     style="@style/Widget.Material3.Chip.Assist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="ESTADO" />
+                    android:layout_marginTop="16dp"
+                    android:text="ESTADO"
+                    app:chipBackgroundColor="@color/loginPrimary"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center" />
 
-                <!-- Datos -->
+                <!-- DATOS IMPORTANTES -->
+
                 <TextView
                     android:id="@+id/tvEventName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="20dp"
                     android:text="Evento: —"
-                    android:textAppearance="?attr/textAppearanceBodyLarge" />
-
-                <TextView
-                    android:id="@+id/tvDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Fecha: —"
-                    android:textAppearance="?attr/textAppearanceBodyLarge" />
+                    android:textColor="@color/loginLabel"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/tvShift"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="Turno: —"
-                    android:textAppearance="?attr/textAppearanceBodyLarge" />
+                    android:textColor="@color/loginLabel"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/tvMesa"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Mesa: —"
-                    android:textAppearance="?attr/textAppearanceBodyLarge" />
-
-                <TextView
-                    android:id="@+id/tvTicketId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ticket ID: —"
-                    android:textAppearance="?attr/textAppearanceBodyLarge" />
-
-                <TextView
-                    android:id="@+id/tvReservationId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Reservación ID: —"
-                    android:textAppearance="?attr/textAppearanceBodyLarge" />
-
-                <TextView
-                    android:id="@+id/tvUsedAt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Usado en: —"
-                    android:textAppearance="?attr/textAppearanceBodyLarge" />
-
-                <TextView
-                    android:id="@+id/tvMessage"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Mensaje: —"
-                    android:textAppearance="?attr/textAppearanceBodyLarge" />
+                    android:text="Mesa: —"
+                    android:textColor="@color/loginLabel"
+                    android:textSize="16sp" />
 
+                <!-- MENSAJE -->
+                <TextView
+                    android:id="@+id/tvMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Mensaje: —"
+                    android:textColor="@android:color/white"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <!-- BOTÓN CERRAR -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnClose"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Cerrar" />
+                    android:layout_marginTop="24dp"
+                    android:text="Cerrar"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    app:cornerRadius="999dp"
+                    app:backgroundTint="@color/loginPrimary"
+                    android:textColor="@color/loginTextOnPrimary" />
+
+                <!-- CAMPOS OCULTOS PARA NO ROMPER LÓGICA -->
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp" />
+
+                <TextView
+                    android:id="@+id/tvTicketId"
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp" />
+
+                <TextView
+                    android:id="@+id/tvReservationId"
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp" />
+
+                <TextView
+                    android:id="@+id/tvUsedAt"
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp" />
+
+                <TextView
+                    android:id="@+id/qrDataTextView"
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp" />
+
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
