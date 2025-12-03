@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -27,7 +28,7 @@ class TicketInfoActivity : AppCompatActivity() {
         val qrRaw = intent.getStringExtra("qr_raw") ?: "-"
         val token = intent.getStringExtra("token") ?: ""
 
-        // Mostrar QR crudo (oculto)
+        // Mostrar QR crudo oculto
         binding.qrDataTextView.text = "QR: $qrRaw"
 
         binding.btnClose.setOnClickListener { finish() }
@@ -37,7 +38,6 @@ class TicketInfoActivity : AppCompatActivity() {
             return
         }
 
-        // Llamar API
         lifecycleScope.launch {
             try {
                 val api = RetrofitClient.getInstance(this@TicketInfoActivity)
@@ -79,7 +79,7 @@ class TicketInfoActivity : AppCompatActivity() {
         val usedAt        = data.usedAt ?: "-"
         val message       = data.message ?: "-"
 
-        // Texto base
+        // ---------------- TEXTO BASE ----------------
         binding.qrDataTextView.text = "QR: $qrRaw"
         binding.statusChip.text = status.uppercase()
 
@@ -92,45 +92,60 @@ class TicketInfoActivity : AppCompatActivity() {
         binding.tvUsedAt.text = "Usado en: $usedAt"
         binding.tvMessage.text = "Mensaje: $message"
 
-        // -----------------------------
-        // LÓGICA REAL PARA COLORES
-        // -----------------------------
+        // ---------------- LÓGICA REAL DE ESTADOS ----------------
         val msg = message.lowercase()
 
         val isPrimeraVez =
-            (msg.contains("marcado como usado")
-                    || (msg.contains("validado") && !msg.contains("ya fue")))
+            msg.contains("marcado como usado") ||
+                    (msg.contains("validado") && !msg.contains("ya fue"))
 
         val isSegundaVez =
             msg.contains("ya fue usado") ||
                     msg.contains("ya usado") ||
                     msg.contains("ya fue escaneado")
 
+        // Colores
         val colorSuccess = ContextCompat.getColor(this, R.color.green_success)
         val colorError   = ContextCompat.getColor(this, R.color.red_error)
 
         val chip = binding.statusChip as Chip
+        val icon = binding.statusIcon  // nuevo ícono
 
         when {
+            // ---------------- PRIMER ESCANEO (VERDE) ----------------
             isPrimeraVez -> {
-                // VERDE = válido por primera vez
                 chip.chipBackgroundColor = ColorStateList.valueOf(colorSuccess)
                 chip.setTextColor(Color.BLACK)
+
                 binding.tvMessage.setTextColor(colorSuccess)
+
+                icon.setImageResource(R.drawable.ic_success)
+                icon.setColorFilter(colorSuccess)
+                icon.visibility = View.VISIBLE
             }
 
+            // ---------------- SEGUNDO ESCANEO / YA USADO (ROJO) ----------------
             isSegundaVez -> {
-                // ROJO = ya usado previamente
                 chip.chipBackgroundColor = ColorStateList.valueOf(colorError)
                 chip.setTextColor(Color.WHITE)
+
                 binding.tvMessage.setTextColor(colorError)
+
+                icon.setImageResource(R.drawable.ic_error)
+                icon.setColorFilter(colorError)
+                icon.visibility = View.VISIBLE
             }
 
             else -> {
+                // Estado raro / fallback
                 val neutral = ContextCompat.getColor(this, R.color.loginLabel)
+
                 chip.chipBackgroundColor = ColorStateList.valueOf(neutral)
                 chip.setTextColor(Color.WHITE)
+
                 binding.tvMessage.setTextColor(neutral)
+
+                icon.visibility = View.GONE
             }
         }
     }
