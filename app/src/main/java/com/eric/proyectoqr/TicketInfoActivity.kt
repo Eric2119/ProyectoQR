@@ -27,7 +27,7 @@ class TicketInfoActivity : AppCompatActivity() {
         val qrRaw = intent.getStringExtra("qr_raw") ?: "-"
         val token = intent.getStringExtra("token") ?: ""
 
-        // Mostrar el QR crudo
+        // Mostrar QR crudo (oculto)
         binding.qrDataTextView.text = "QR: $qrRaw"
 
         binding.btnClose.setOnClickListener { finish() }
@@ -37,13 +37,11 @@ class TicketInfoActivity : AppCompatActivity() {
             return
         }
 
-        // Llamar a la API para validar el boleto
+        // Llamar API
         lifecycleScope.launch {
             try {
-                // 1) Obtener la instancia de ApiService usando el contexto de la Activity
                 val api = RetrofitClient.getInstance(this@TicketInfoActivity)
 
-                // 2) Llamar al endpoint
                 val response = api.validateTicket(
                     ScanTicketRequest(token = token)
                 )
@@ -58,10 +56,7 @@ class TicketInfoActivity : AppCompatActivity() {
                 } else {
                     val code = response.code()
                     binding.tvMessage.text = "Mensaje: error $code al validar el boleto."
-                    Log.e(
-                        "TicketInfoActivity",
-                        "Error API $code: ${response.errorBody()?.string()}"
-                    )
+                    Log.e("TicketInfoActivity", "Error API $code: ${response.errorBody()?.string()}")
                 }
 
             } catch (e: Exception) {
@@ -70,10 +65,10 @@ class TicketInfoActivity : AppCompatActivity() {
                     "Mensaje: error de red: ${e.localizedMessage ?: "desconocido"}"
             }
         }
-
     }
 
     private fun bindTicketInfo(qrRaw: String, data: ScanTicketResponse) {
+
         val status        = data.status ?: "-"
         val eventName     = data.eventName ?: "-"
         val date          = data.date ?: "-"
@@ -86,7 +81,7 @@ class TicketInfoActivity : AppCompatActivity() {
 
         // Texto base
         binding.qrDataTextView.text = "QR: $qrRaw"
-        binding.statusChip.text = if (status.isBlank()) "-" else status.uppercase()
+        binding.statusChip.text = status.uppercase()
 
         binding.tvEventName.text = "Evento: $eventName"
         binding.tvDate.text = "Fecha: $date"
@@ -97,18 +92,46 @@ class TicketInfoActivity : AppCompatActivity() {
         binding.tvUsedAt.text = "Usado en: $usedAt"
         binding.tvMessage.text = "Mensaje: $message"
 
-        // Colores del chip según status
-        val isOk = status.equals("ok", true) ||
-                status.equals("válido", true) ||
-                status.equals("valido", true) ||
-                status.equals("valid", true)
+        // -----------------------------
+        // LÓGICA REAL PARA COLORES
+        // -----------------------------
+        val msg = message.lowercase()
 
-        val bgColorRes = if (isOk) R.color.teal_200 else android.R.color.holo_red_dark
-        val textColor  = if (isOk) Color.BLACK else Color.WHITE
+        val isPrimeraVez =
+            (msg.contains("marcado como usado")
+                    || (msg.contains("validado") && !msg.contains("ya fue")))
+
+        val isSegundaVez =
+            msg.contains("ya fue usado") ||
+                    msg.contains("ya usado") ||
+                    msg.contains("ya fue escaneado")
+
+        val colorSuccess = ContextCompat.getColor(this, R.color.green_success)
+        val colorError   = ContextCompat.getColor(this, R.color.red_error)
 
         val chip = binding.statusChip as Chip
-        val bgColor = ContextCompat.getColor(this, bgColorRes)
-        chip.chipBackgroundColor = ColorStateList.valueOf(bgColor)
-        chip.setTextColor(textColor)
+
+        when {
+            isPrimeraVez -> {
+                // VERDE = válido por primera vez
+                chip.chipBackgroundColor = ColorStateList.valueOf(colorSuccess)
+                chip.setTextColor(Color.BLACK)
+                binding.tvMessage.setTextColor(colorSuccess)
+            }
+
+            isSegundaVez -> {
+                // ROJO = ya usado previamente
+                chip.chipBackgroundColor = ColorStateList.valueOf(colorError)
+                chip.setTextColor(Color.WHITE)
+                binding.tvMessage.setTextColor(colorError)
+            }
+
+            else -> {
+                val neutral = ContextCompat.getColor(this, R.color.loginLabel)
+                chip.chipBackgroundColor = ColorStateList.valueOf(neutral)
+                chip.setTextColor(Color.WHITE)
+                binding.tvMessage.setTextColor(neutral)
+            }
+        }
     }
 }
